@@ -112,14 +112,16 @@
         <div class="left-panel">
             <div class="panel-header">
                 <div class="panel-title">📁 원본 시험지 기출 스캔 대지</div>
-                <button type="button" class="btn-action btn-ai" onclick="runSimulatedAI()">🚀 AI 자동 레이어 분석 & OCR 가동</button>
+                <button type="button" class="btn-action btn-ai" onclick="triggerFileSelect()">🚀 내 컴퓨터 파일 탐색기 열기</button>
+                <!-- 히든 파일 인풋 선언 -->
+                <input type="file" id="hidden-file-input" style="display:none;" onchange="handleFileSelect(event)">
             </div>
             
-            <div class="dropzone-area" id="drop-zone" onclick="runSimulatedAI()">
+            <div class="dropzone-area" id="drop-zone">
                 <div class="dropzone-msg" id="upload-msg-box">
                     <span style="font-size: 40px; display:block; margin-bottom:10px;">📄</span>
-                    여기에 학생 시험지 이미지 파일을 드래그하여 드롭하거나 클릭하세요.<br>
-                    <span style="font-size:11px; color:#94a3b8; font-weight:500;">(테스트를 위해 클릭하면 대치/수성구 최고 난이도 샘플 문항이 자동으로 파싱됩니다)</span>
+                    여기에 학생 과학 시험지 사진 파일을 드래그하여 드롭하세요.<br>
+                    <span style="font-size:11px; color:#d4af37; font-weight:600;">(형이 실행한 node 서버와 연결되어 제미나이 AI 해독이 시작됩니다!)</span>
                 </div>
 
                 <!-- AI 레이어 자동 분할 시각화 시뮬레이터 가상 도화지 -->
@@ -185,8 +187,8 @@
                 <!-- 1번 문항 편집기 구조 카드 -->
                 <div class="restorer-card">
                     <div class="card-header">
-                        <span>[문항 1] 실시간 검수 및 텍스트 가공 서랍</span>
-                        <span style="color:#d4af37;">물리 파트 특화</span>
+                        <span>[문항 1] 제미나이 AI 실시간 추출 및 연동 서랍</span>
+                        <span style="color:#d4af37;">물리/화학 통합 교정</span>
                     </div>
                     <div class="card-body">
                         
@@ -196,8 +198,8 @@
                                 [AI 고화질 추출 그래프]<br>V=12V 회로도 스냅샷
                             </div>
                             <div>
-                                <div style="font-size:12px; font-weight:800; color:#1e40af;">🎯 AI 이미지 종횡비 자동 보정 및 4K 업스케일 완료</div>
-                                <div style="font-size:11px; color:#64748b; margin-top:3px;">문제은행 결합 파일명: `sub_circuit_q1_img.png` 생성됨</div>
+                                <div style="font-size:12px; font-weight:800; color:#1e40af;">🎯 제미나이 멀티모달 분석 완료</div>
+                                <div style="font-size:11px; color:#64748b; margin-top:3px;">로컬 포트 3000번 파이프라인 정상 가동 중</div>
                             </div>
                         </div>
 
@@ -205,7 +207,7 @@
                             <span>텍스트 및 라텍스 수식 가공창 (인라인 수정)</span>
                             <span style="color:#64748b; font-size:11px;">수식은 $기호 사이에 넣으세요</span>
                         </div>
-                        <textarea class="raw-editor" id="editor-p1" oninput="liveCompileMath('p1')">대기 중... AI 분석 버튼을 누르면 원본 코드가 로드됩니다.</textarea>
+                        <textarea class="raw-editor" id="editor-p1" oninput="liveCompileMath('p1')">여기에 시험지 이미지 파일을 던지면 형 맥북의 서버를 타고 제미나이 AI가 실시간으로 이곳에 수식을 채워줍니다.</textarea>
                         
                         <!-- 수식 입력 가속 매크로 패널 -->
                         <div class="science-toolbar">
@@ -240,37 +242,96 @@
     <div class="toast-msg" id="toast-box">✨ 성공! 성태형이 검수한 문항이 무결점 오타 0% 상태로 네이처 문제은행 서버에 대기 적재되었습니다!</div>
 
     <script>
-        // AI 엔진 가동 시 가상으로 추출해 낼 정밀 과학 기출 데이터 세트 구축
-        const MOCK_AI_OCR_RESULT = {
-            p1_text: "1. 그림은 저항의 직렬연결 회로를 나타낸 것이다. 스위치를 닫을 때 회로 전체에 흐르는 전류의 세기는 몇 $A$ 인지 구하시오.\n\n① 1 $A$     ② 2 $A$     ③ 3 $A$     ④ 4 $A$     ⑤ 5 $A$",
-            p2_text: "2. 다음은 화학 반응 법칙을 확인하기 위해 수소 기체와 산소 기체가 반응하여 수증기가 생성되는 반응의 화학 반응식을 나타낸 것이다. 화학식의 계수 $a$ 와 $b$ 의 합을 고르시오.\n\n$$ aH_2 + bO_2 \\rightarrow 2H_2O $$\n\n① 2     ② 3     ③ 4     ④ 5     ⑤ 6"
-        };
-
-        // 가상 AI 엔진 구동 프로세스 함수
-        function runSimulatedAI() {
-            // UI 레이어 시각적 변환 원리 가동
-            document.getElementById('upload-msg-box').style.display = 'none';
-            const canvasContainer = document.getElementById('canvas-container');
-            canvasContainer.style.display = 'block';
-
-            // 이미지 소스 내부의 문항 바운딩 박스를 계산하여 화면에 가상 배치 처리
-            createBoundingBox('mock-p1-area', '1번 문항 [물리/수식/그림 융합]', 'text-box');
-            createBoundingBox('mock-p1-area', '그림 크롭 및 4K 업스케일 표적', 'img-box', {top: '32px', left: '160px', width: '120px', height: '80px'});
-            createBoundingBox('mock-p2-area', '2번 문항 [화학/반응식 기호 수식]', 'text-box');
-
-            // 우측 가공 워크벤치 창에 AI OCR 로우 데이터 사본 전송
-            document.getElementById('editor-p1').value = MOCK_AI_OCR_RESULT.p1_text + "\n\n\n-------------------------\n[연동 수증기 생성 반응 보너스 복원 문항]\n\n" + MOCK_AI_OCR_RESULT.p2_text;
-            
-            // 이미지 크롭 성공 시각적 슬롯 오픈
-            document.getElementById('img-slot-p1').style.display = 'flex';
-
-            // 실시간 변환 엔진 컴파일 실행
-            liveCompileMath('p1');
+        // 파일 탐색기 열기 트리거
+        function triggerFileSelect() {
+            document.getElementById('hidden-file-input').click();
         }
 
-        // 스캔 대지 위에 가상의 바운딩 박스를 그려주는 매커니즘 자바스크립트 함수
+        // 파일 탐색기로 파일 선택 시 처리
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                handleRealGeminiAPI(files[0]);
+            }
+        }
+
+        // [진짜 연동 버전] 파일 드롭/선택 시 형의 맥북 로컬 서버로 데이터를 전송하는 코어 함수
+        async function handleRealGeminiAPI(file) {
+            const msgBox = document.getElementById('upload-msg-box');
+            const canvasContainer = document.getElementById('canvas-container');
+            const editor = document.getElementById('editor-p1');
+            const preview = document.getElementById('preview-p1');
+            const imgSlot = document.getElementById('img-slot-p1');
+
+            // UI 상태를 분석 중 모드로 실시간 변경
+            msgBox.innerHTML = "<span style='font-size: 40px; display:block; margin-bottom:10px;'>⚡</span> <b>제미나이 AI가 과학 시험지를 정밀 해독 중입니다...</b><br><span style='font-size:12px; color:#64748b;'>맥북 로컬 포트 3000번 통신 중 (약 3~5초 소요)</span>";
+            editor.value = "구글 제미나이 멀티모달 엔진 분석 중...";
+            preview.innerHTML = "<span style='color:#64748b; font-style:italic;'>AI 통신 회선 응답 대기 중...</span>";
+
+            // 1. 서버로 전송할 FormData 객체 생성 및 파일 바인딩
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                // 2. 형 맥북에서 구동 중인 로컬 백엔드 서버 주소로 전송
+                const response = await fetch('http://localhost:3000/api/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.text) {
+                    // 3. 임시 안내판 가리고 가상 스캔 뷰어 활성화 시각화
+                    msgBox.style.display = 'none';
+                    canvasContainer.style.display = 'block';
+                    imgSlot.style.display = 'flex';
+
+                    // 가상 대지 위에 오버레이 바운딩 박스 그려주는 효과 부여
+                    createBoundingBox('mock-p1-area', '1번 문항 [물리 정밀 복원]', 'text-box');
+                    createBoundingBox('mock-p2-area', '2번 문항 [화학식 기호 추출]', 'text-box');
+
+                    // 4. 제미나이가 최종 해독해 준 텍스트 원본을 에디터 가공창에 주입
+                    editor.value = data.text;
+                    
+                    // 5. 마스작(MathJax) 수학 수식 컴파일러 엔진 가동하여 실시간 시각화
+                    liveCompileMath('p1');
+                } else {
+                    msgBox.innerHTML = "❌ AI 해독에 실패했습니다.";
+                    editor.value = "서버 에러 응답 수신: " + data.error;
+                }
+
+            } catch (error) {
+                msgBox.innerHTML = "❌ 로컬 서버 연결 실패";
+                editor.value = "서버에 연결할 수 없습니다. VS Code 내부 터미널에서 'node server.js'가 실행 중인지 확인하세요!\n\n오류 내용: " + error.message;
+                alert("성태형, 3000번 서버가 켜져 있는지 확인해 줘! 에러: " + error.message);
+            }
+        }
+
+        // 드래그 앤 드롭 영역 이벤트 가로채기 및 드롭존 바인딩 매커니즘
+        const dropZone = document.getElementById('drop-zone');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(name => {
+            dropZone.addEventListener(name, e => { 
+                e.preventDefault(); 
+                e.stopPropagation(); 
+            });
+        });
+
+        // 파일 드롭 시 구동
+        dropZone.addEventListener('drop', e => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleRealGeminiAPI(files[0]);
+            }
+        });
+
+        // 스캔 대지 위에 가상의 바운딩 박스를 그려주는 시각 효과 자바스크립트 함수
         function createBoundingBox(parentId, label, type, customCoords = null) {
             const parent = document.getElementById(parentId);
+            // 중복 생성 방지 조치
+            if (parent.querySelector(`.ai-box[data-label="${label}"]`)) return;
+
             const box = document.createElement('div');
             box.className = `ai-box ${type === 'img-box' ? 'img-box' : ''}`;
             box.setAttribute('data-label', label);
