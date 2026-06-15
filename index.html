@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATURE SCIENCE ACADEMY - 기출 초정밀 복원 시스템 v3.1 Pro Master</title>
+    <title>NATURE SCIENCE ACADEMY - 기출 초정밀 복원 시스템 v4.0 Ultimate Master</title>
     <style>
-        @import url('[https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css](https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css)');
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
         
         :root[data-theme="dark"] {
             --bg-master: #0f172a; --bg-panel: #1e293b; --bg-header: #111c3a;
@@ -53,18 +53,22 @@
         .resizer-bar:hover, .resizer-bar.dragging { background-color: var(--accent-gold); }
 
         /* 2단: 중앙 원본 뷰어 */
-        .center-canvas { width: 42%; display: flex; flex-direction: column; background-color: var(--bg-master); height: 100%; z-index: 5; }
+        .center-canvas { width: 42%; display: flex; flex-direction: column; background-color: var(--bg-master); height: 100%; z-index: 5; position: relative; }
         .panel-header { background-color: var(--bg-panel); padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         .panel-title { font-size: 13px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
         
-        .center-scroll-zone { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 40px; background-color: var(--bg-panel); height: 100%; }
-        .center-item-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; flex-shrink: 0; padding-bottom: 10px; border-bottom: 2px dashed var(--border-color); }
+        .center-scroll-zone { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 40px; background-color: var(--bg-panel); height: 100%; position: relative; }
+        .center-item-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; flex-shrink: 0; padding-bottom: 10px; border-bottom: 2px dashed var(--border-color); position: relative; }
         .page-badge { align-self: flex-start; background: var(--accent-gold); color: #111c3a; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .center-item { width: 100%; border-radius: 6px; border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.3); background-color: white; display: block; }
         iframe.center-item { height: 800px; border: none; }
         
         .dropzone-msg { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600; line-height: 1.6; margin: auto; background: rgba(0, 0, 0, 0.2); padding: 40px; border-radius: 8px; border: 2px dashed var(--border-color); cursor: pointer; transition: all 0.2s; width: 80%; }
         .dropzone-msg:hover { border-color: var(--accent-gold); background: rgba(212,175,55,0.05); }
+
+        /* ✂️ v1.2 크로퍼 전용 투명 레이어 UI */
+        #crop-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; display: none; z-index: 100; background: rgba(0,0,0,0.1); }
+        .crop-box { position: absolute; border: 2px dashed #ef4444; background: rgba(239, 68, 68, 0.15); pointer-events: none; }
 
         /* 3단: 우측 에디터 패널 */
         .right-panel { flex: 1; display: flex; flex-direction: column; background-color: var(--bg-panel); height: 100%; z-index: 5; min-width: 300px; }
@@ -78,9 +82,28 @@
         .restorer-card.active-card { border-color: var(--accent-gold) !important; box-shadow: 0 0 15px rgba(212, 175, 55, 0.35); } 
         
         .card-header { background: var(--bg-header); color: #ffffff; padding: 10px 15px; font-size: 12px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); cursor: pointer; }
-        .card-body { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .card-body { padding: 15px; display: flex; flex-direction: column; gap: 20px; }
         
         .live-math-preview { background-color: rgba(0,0,0,0.05); border-left: 4px solid var(--accent-gold); padding: 20px; border-radius: 4px; font-size: 14.5px; line-height: 1.8; min-height: 220px; overflow-x: auto; border: 1px solid var(--border-color); white-space: pre-wrap; font-family: 'Pretendard', sans-serif; outline: none; }
+
+        /* 💡 v4.0 추가: 문항 오브젝트 단위 분리 조각 디자인 */
+        .question-sub-card { background: rgba(0, 0, 0, 0.15); border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 15px; overflow: hidden; display: flex; flex-direction: column; }
+        .question-sub-card.edited-active { border-color: #ef4444 !important; box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+        .q-meta-header { background: rgba(0, 0, 0, 0.25); padding: 8px 12px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+        
+        .tag-badge { font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; color: #fff; }
+        .tag-num { background: #ef4444; }
+        .tag-school { background: #3b82f6; }
+        .tag-unit { background: #10b981; }
+        .tag-level { background: #8b5cf6; }
+
+        .q-body-edit { padding: 12px; font-size: 14px; line-height: 1.8; outline: none; min-height: 60px; color: var(--text-main); background: transparent; }
+        .crop-image-holder-slot { padding: 0 12px 12px 12px; display: flex; flex-direction: column; }
+        .crop-image-holder-slot img { max-width: 100%; border: 2px solid var(--accent-gold); border-radius: 4px; margin-top: 5px; }
+        .hwp-eqn-footer { background: rgba(0,0,0,0.2); padding: 6px 12px; font-size: 11px; color: var(--accent-gold); border-top: 1px solid var(--border-color); font-family: monospace; white-space: pre-wrap; }
+
+        /* 인간 최종 개입 수정 추적 디스플레이 */
+        .human-edited { background-color: rgba(234, 179, 8, 0.35); color: #ef4444; font-weight: 800; border-bottom: 1px dashed #ef4444; padding: 0 2px; }
 
         /* 형광펜 효과 스타일 */
         .ocr-warn { background-color: rgba(234, 179, 8, 0.25); border-bottom: 2px wavy #eab308; color: #fef08a; padding: 0 2px; border-radius: 3px; font-weight: 800; }
@@ -101,9 +124,10 @@
     <header class="master-header">
         <div class="logo-group">
             <div class="logo-text">NATURE SCIENCE ACADEMY</div>
-            <h1 class="service-title">과학 기출 초정밀 복원 워크벤치 <span style="color:#d4af37; font-size:12px; font-weight:600;">v3.1 Pro Master</span></h1>
+            <h1 class="service-title">과학 기출 초정밀 복원 워크벤치 <span style="color:#d4af37; font-size:12px; font-weight:600;">v4.0 Ultimate Master</span></h1>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="theme-toggle-btn" style="border-color:#ef4444; color:#ef4444;" onclick="toggleCropMode()" id="btn-crop">✂️ 그림 크롭 모드 (OFF)</button>
             <button class="theme-toggle-btn" onclick="toggleTheme()">🌗 테마 스타일 전환</button>
             <span style="background-color: #2e7d32; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; color: #ffffff;">실전 구동 모드</span>
         </div>
@@ -129,9 +153,10 @@
                 <div class="dropzone-msg" id="upload-msg-box" onclick="triggerFileSelect()">
                     <span style="font-size: 45px; display:block; margin-bottom:12px;">📚</span>
                     출판사 정품 PDF 또는 스캔본 파일들을 드롭하세요.<br>
-                    <span style="font-size:11px; color:var(--accent-gold); font-weight:700;">(다중 파일 업로드 및 실시간 하이라이트 완전히 연동됨)</span>
+                    <span style="font-size:11px; color:var(--accent-gold); font-weight:700;">(문항 분리 슬라이싱 및 이미지 크로퍼 탑재 완료)</span>
                 </div>
             </div>
+            <div id="crop-overlay"></div>
         </div>
 
         <div class="resizer-bar" id="resizer-right"></div>
@@ -151,12 +176,18 @@
         <div style="font-size:12.5px; font-weight:600; color:var(--text-muted);">
             💡 기획 관리자 모드: 단축키 <kbd style="background:var(--bg-master); padding:2px 5px; border-radius:3px; border:1px solid var(--border-color);">Cmd + S</kbd> 작동 시 데이터가 무결점으로 즉시 적재됩니다.
         </div>
-        <button type="button" class="btn-action btn-save" onclick="showToast('✨ 성공! 최종 관리자 검수 승인 마크가 태깅되어 네이처 과학 DB 인프라에 안전하게 적재되었습니다!')">✔️ 이력 태깅 완료 및 네이처 문제은행 최종 적재</button>
+        <div style="display:flex; gap:10px;">
+            <button type="button" class="btn-action btn-save" style="background:#2563eb; border-color:#3b82f6;" onclick="downloadServerHWP()">📥 전체 문항 HWP 원클릭 직접 다운로드</button>
+            <button type="button" class="btn-action btn-save" onclick="showToast('✨ 성공! 최종 관리자 검수 승인 마크가 태깅되어 네이처 과학 DB 인프라에 안전하게 적재되었습니다!')">✔️ 이력 태깅 완료 및 네이처 문제은행 최종 적재</button>
+        </div>
     </footer>
 
     <div class="toast-msg" id="toast-box"></div>
 
     <script>
+        // 전역 메모리 적재소 배열 변수 (인라인 수정본 및 파일 다운로드용 상태 추적)
+        let globalPagesQuestionsData = {};
+
         function toggleTheme() {
             const html = document.documentElement;
             html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
@@ -288,12 +319,13 @@
 
             thumbContainer.innerHTML = ''; centerContainer.innerHTML = ''; cardsArena.innerHTML = '';
             if(msgBox) msgBox.style.display = 'none';
+            globalPagesQuestionsData = {}; // 저장소 리셋
 
             Array.from(files).forEach((file, index) => {
                 const isPDF = file.type === 'application/pdf';
                 const fileUrl = URL.createObjectURL(file);
 
-                // 1. 왼쪽 썸네일 생성 (이미지일 경우 안전하게 <img> 주입으로 표시 문제 완전 해결)
+                // 1. 왼쪽 썸네일 생성
                 const thumb = document.createElement('div');
                 thumb.className = `thumb-item ${isPDF ? 'pdf-type' : ''}`;
                 thumb.id = `thumb-${index}`;
@@ -317,21 +349,19 @@
                 centerWrap.innerHTML += mediaElement;
                 centerContainer.appendChild(centerWrap);
 
-                // 3. 우측 AI 결과물 편집 패널 매핑
+                // 3. 우측 AI 결과물 편집 패널 매핑 (v4.0 낱개 분리 카드 수용 아키텍처)
                 const card = document.createElement('div');
                 card.className = 'restorer-card';
                 card.id = `card-wrap-${index}`;
                 card.dataset.id = index;
                 card.innerHTML = `
                     <div class="card-header" onclick="jumpToPage(${index})">
-                        <span>🎯 페이지 ${index + 1} 실시간 복원 데이터</span>
-                        <button class="btn-copy" onclick="event.stopPropagation(); copyToHWP('preview-${index}')">📋 HWP 1초 복사</button>
+                        <span>🎯 페이지 ${index + 1} 실시간 문항별 분리 복원</span>
+                        <button class="btn-copy" onclick="event.stopPropagation(); copyToHWP('preview-${index}', ${index})">📋 페이지 전체 HWP 복사</button>
                     </div>
-                    <div class="card-body">
-                        <div class="live-math-preview" id="preview-${index}" contenteditable="true" spellcheck="false">
-                            <div class="spinner" style="display:block; margin: 20px auto;"></div>
-                            <div style="text-align:center; color:var(--accent-gold); font-size:13px; font-weight:700;">⚡ 3.5 Flash 엔진이 오타율 검수 작업을 처리하고 있습니다...</div>
-                        </div>
+                    <div class="card-body" id="preview-${index}">
+                        <div class="spinner" style="display:block; margin: 20px auto;"></div>
+                        <div style="text-align:center; color:var(--accent-gold); font-size:13px; font-weight:700;">⚡ 3.5 Flash 엔진이 문항 분리 및 자동 태깅 작업을 처리하고 있습니다...</div>
                     </div>
                 `;
                 cardsArena.appendChild(card);
@@ -345,7 +375,7 @@
         }
 
         // ==========================================
-        // 💡 백틱 코드 블록 및 마크다운 완벽 정화 엔진
+        // 💡 v4.0 통합: 문항 자동 분리 & 태깅 렌더링 파이프라인
         // ==========================================
         async function callGeminiAPI(file, index) {
             const preview = document.getElementById(`preview-${index}`);
@@ -353,40 +383,207 @@
             formData.append('image', file);
 
             try {
+                // v4.0 JSON 엔드포인트 호출
                 const response = await fetch('http://localhost:4000/api/analyze', { method: 'POST', body: formData });
                 const data = await response.json();
 
-                if (response.ok && data.text) {
-                    // 💡 코드 블록 백틱 스트링 껍데기 찌꺼기 3중 필터링 멸균기 가동
-                    let cleanedText = data.text
-                        .replace(/```html/gmi, '') 
-                        .replace(/```/g, '')       
-                        .replace(/^\s*[-*_]{3,}\s*$/gm, '') 
-                        .trim();
+                if (response.ok && data.questions) {
+                    // 메모리에 파싱 객체 데이터 전역 보존
+                    globalPagesQuestionsData[index] = data.questions;
+                    
+                    // 프리뷰 컨테이너 청소 후 독립 문항 카드 렌더링
+                    preview.innerHTML = '';
+                    
+                    data.questions.forEach((q, qIdx) => {
+                        const subCard = document.createElement('div');
+                        subCard.className = 'question-sub-card';
+                        subCard.id = `sub-card-${index}-${qIdx}`;
+                        subCard.innerHTML = `
+                            <div class="q-meta-header">
+                                <span class="tag-badge tag-num">${q.q_num}</span>
+                                <span class="tag-badge tag-school">${q.school}</span>
+                                <span class="tag-badge tag-unit">${q.unit_tag}</span>
+                                <span class="tag-badge tag-level">${q.type} | 난이도:${q.level}</span>
+                                <button class="btn-copy" style="margin-left:auto; font-size:10px; padding:2px 6px; background:#ef4444; color:white; border:none; border-radius:3px;" onclick="insertCroppedImageToSlot(${index}, ${qIdx})">✂️ 그림 삽입</button>
+                            </div>
+                            <div class="q-body-edit" contenteditable="true" spellcheck="false" id="q-body-text-${index}-${qIdx}">
+                                ${q.html_text}
+                            </div>
+                            <div class="crop-image-holder-slot" id="crop-slot-${index}-${qIdx}"></div>
+                            <div class="hwp-eqn-footer">※ 한글 수식 코드: ${q.hwp_eqn}</div>
+                        `;
+                        preview.appendChild(subCard);
 
-                    // 그래머리식 특수 규격 오타 패턴 하이라이팅 처리
-                    cleanedText = cleanedText.replace(/([0-9]+[OIlB]+[0-9]+)/g, '<mark class="ocr-warn" title="숫자 사이 알파벳 검출 (오타 의심)">$1</mark>');
+                        // 💡 2.1 인라인 실시간 변경 이력 추적 장치 바인딩
+                        const editableZone = document.getElementById(`q-body-text-${index}-${qIdx}`);
+                        editableZone.addEventListener('input', () => {
+                            subCard.classList.add('edited-active'); // 변경 시 카드 테두리 레드라이트 점등
+                            // 전역 동기화 데이터 업데이트
+                            globalPagesQuestionsData[index][qIdx].html_text = editableZone.innerHTML;
+                        });
+                    });
 
-                    preview.innerHTML = cleanedText;
                 } else {
                     preview.innerHTML = "❌ 에러 발생: " + (data.error || "알 수 없는 오류");
                 }
             } catch (error) {
-                preview.innerHTML = "❌ <b>서버 연결 실패!</b> 터미널 대기창에서 4000번 서버 가동 상태를 검사해 주세요 형.";
+                preview.innerHTML = "❌ <b>서버 연결 실패!</b> 4000번 서버 가동 상태를 검사해 주세요 형.";
             }
         }
 
-        // 아래한글 테마 오염 복사 세탁 엔진
-        function copyToHWP(previewId) {
-            const preview = document.getElementById(previewId);
-            const sandbox = document.createElement('div');
-            sandbox.innerHTML = preview.innerHTML;
+        // ==========================================
+        // 💡 1.2 시각 자료 이미지 크로퍼 엔진 제어 모듈
+        // ==========================================
+        let cropModeActive = false;
+        let isDragging = false;
+        let startX, startY;
+        let cropBoxElement = null;
+        let lastCroppedDataUrlString = null;
+
+        const cropOverlay = document.getElementById('crop-overlay');
+
+        function toggleCropMode() {
+            cropModeActive = !cropModeActive;
+            const btn = document.getElementById('btn-crop');
+            btn.innerText = cropModeActive ? '✂️ 크롭 모드 (ON)' : '✂️ 크롭 모드 (OFF)';
+            btn.style.borderColor = cropModeActive ? '#10b981' : '#ef4444';
+            btn.style.color = cropModeActive ? '#10b981' : '#ef4444';
+            cropOverlay.style.display = cropModeActive ? 'block' : 'none';
+        }
+
+        cropOverlay.addEventListener('mousedown', e => {
+            if(!cropModeActive) return;
+            isDragging = true;
+            startX = e.offsetX;
+            startY = e.offsetY;
+            cropBoxElement = document.createElement('div');
+            cropBoxElement.className = 'crop-box';
+            cropBoxElement.style.left = startX + 'px';
+            cropBoxElement.style.top = startY + 'px';
+            cropOverlay.appendChild(cropBoxElement);
+        });
+
+        cropOverlay.addEventListener('mousemove', e => {
+            if(!isDragging) return;
+            const currentX = e.offsetX;
+            const currentY = e.offsetY;
+            cropBoxElement.style.width = Math.abs(currentX - startX) + 'px';
+            cropBoxElement.style.height = Math.abs(currentY - startY) + 'px';
+            cropBoxElement.style.left = Math.min(currentX, startX) + 'px';
+            cropBoxElement.style.top = Math.min(currentY, startY) + 'px';
+        });
+
+        cropOverlay.addEventListener('mouseup', (e) => {
+            if(!isDragging) return;
+            isDragging = false;
+
+            // 스크롤 동기화 기준으로 현재 하이라이트 활성화된 중앙 이미지 래퍼 타겟팅
+            const activeThumb = document.querySelector('.thumb-item.active');
+            if(!activeThumb) return;
+            const activeIdx = activeThumb.id.replace('thumb-', '');
+            const imgElement = document.querySelector(`#center-wrap-${activeIdx} .center-item`);
+
+            if (!imgElement || imgElement.tagName === 'IFRAME') {
+                alert('⚠️ 크롭 기능은 이미지 파일 형식의 기출 스캔본에서만 안정적으로 작동합니다, 형.');
+                cropOverlay.innerHTML = '';
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const scaleX = imgElement.naturalWidth / imgElement.clientWidth;
+            const scaleY = imgElement.naturalHeight / imgElement.clientHeight;
+
+            const rect = cropBoxElement.getBoundingClientRect();
+            const overlayRect = cropOverlay.getBoundingClientRect();
+
+            canvas.width = rect.width * scaleX;
+            canvas.height = rect.height * scaleY;
+
+            ctx.drawImage(imgElement, 
+                (rect.left - overlayRect.left) * scaleX, 
+                (rect.top - overlayRect.top) * scaleY, 
+                canvas.width, canvas.height,
+                0, 0, canvas.width, canvas.height
+            );
+
+            lastCroppedDataUrlString = canvas.toDataURL('image/png');
+            cropOverlay.innerHTML = ''; // 캔버스 드래그 박스 박멸 청소
+            alert('✂️ 과학 그래픽 자료 크롭 캡처 완료! 원하는 문항 카드의 [그림 삽입] 단추를 누르세요.');
+        });
+
+        function insertCroppedImageToSlot(pageIdx, qIdx) {
+            if(!lastCroppedDataUrlString) return alert('먼저 왼쪽 원본 뷰어 판넬에서 크롭 드래그를 실행해 주세요.');
+            const slot = document.getElementById(`crop-slot-${pageIdx}-${qIdx}`);
+            slot.innerHTML = `<label style="font-size:10px; color:var(--accent-gold); font-weight:800; margin-top:10px;">[연동 시각 그래픽 자산]</label><img src="${lastCroppedDataUrlString}">`;
             
-            // 검사 형광펜 태그 제거 후 문자열 치환 복구
-            const marks = sandbox.querySelectorAll('mark.ocr-warn');
-            marks.forEach(mark => {
-                const textNode = document.createTextNode(mark.textContent);
-                mark.parentNode.replaceChild(textNode, mark);
+            // 전역 오브젝트 데이터에 크롭 이미지 바인딩 정보 주입
+            if(globalPagesQuestionsData[pageIdx] && globalPagesQuestionsData[pageIdx][qIdx]) {
+                globalPagesQuestionsData[pageIdx][qIdx].has_image = true;
+                globalPagesQuestionsData[pageIdx][qIdx].image_data = lastCroppedDataUrlString;
+            }
+        }
+
+        // ==========================================
+        // 💡 3.2 핵심: 서버사이드 변환 엔진 연동 원클릭 HWP 다운로드 
+        // ==========================================
+        async function downloadServerHWP() {
+            // 구조화된 전역 데이터 수집 취합
+            const allQuestions = [];
+            Object.keys(globalPagesQuestionsData).forEach(pageKey => {
+                globalPagesQuestionsData[pageKey].forEach(q => {
+                    allQuestions.push(q);
+                });
+            });
+
+            if(allQuestions.length === 0) return alert('네이처 운영 OS에 로드된 문항 데이터 조각 자산이 존재하지 않습니다.');
+
+            showToast('📥 차세대 변환 파이프라인 가동 - 정품 .HWP 문서 직접 빌드 중...');
+
+            try {
+                const res = await fetch('http://localhost:4000/api/download-hwp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ questions: allQuestions })
+                });
+
+                if(!res.ok) throw new Error('서버 다운로드 생성 에러');
+                
+                const blob = await res.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const anchor = document.createElement('a');
+                anchor.href = downloadUrl;
+                anchor.download = '네이처_과학_기출_자산_마스터.hwp';
+                document.body.appendChild(anchor);
+                anchor.click();
+                anchor.remove();
+                showToast('🚀 빌드 성공! 정품 한글 파일 포맷이 다운로드되었습니다.');
+            } catch (err) {
+                alert('❌ HWP 파일 생성 엔진 통신 실패. server.js 구동 상태를 확인하세요 형.');
+            }
+        }
+
+        // ==========================================
+        // 💡 기존의 테마 오염 한글 클립보드 세탁 복사 엔진 (v4.0 낱개 대응 개조)
+        // ==========================================
+        function copyToHWP(previewId, pageIndex) {
+            const pageData = globalPagesQuestionsData[pageIndex];
+            if(!pageData || pageData.length === 0) return alert('복원 완료된 문항 데이터가 없습니다.');
+
+            const sandbox = document.createElement('div');
+            
+            // 한글 매핑 호환용 격자 구조 직조
+            pageData.forEach(q => {
+                sandbox.innerHTML += `
+                <table border="1" style="border-collapse:collapse; width:100%; margin-bottom:20px; border-color:#000000;">
+                    <tr><td style="background:#f1f5f9; font-weight:bold; padding:8px; font-size:11pt; color:#000000;">
+                        [${q.q_num}] ${q.school} | ${q.unit_tag} (난이도: ${q.level})
+                    </td></tr>
+                    <tr><td style="padding:15px; font-size:11pt; color:#000000; line-height:1.8;">
+                        ${q.html_text}
+                    </td></tr>
+                </table>`;
             });
             
             sandbox.style.color = '#000000';
@@ -407,8 +604,10 @@
             const richText = new ClipboardItem({ 'text/html': blob });
             
             navigator.clipboard.write([richText]).then(() => {
-                showToast('🚀 HWP용 리치 텍스트 복사 완료! 한글 프로그램에 Ctrl+V 하세요.');
+                showToast('🚀 해당 페이지의 분리 문항 전체가 테마 세탁 후 HWP 클립보드에 복사 완료되었습니다!');
             }).catch(err => {
+                // 폴백 복사 작동
+                const preview = document.getElementById(previewId);
                 const selection = window.getSelection();
                 const range = document.createRange();
                 range.selectNodeContents(preview);
