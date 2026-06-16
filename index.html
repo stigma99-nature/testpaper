@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATURE SCIENCE ACADEMY - 기출 초정밀 복원 시스템 v4.0 Ultimate Master</title>
+    <title>SOMA OS v4.0 Ultimate - 네이처 과학 자산화 플랫폼</title>
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
         
@@ -21,7 +21,6 @@
         *, *::before, *::after { box-sizing: border-box; transition: background-color 0.2s ease, border-color 0.2s ease; }
         body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-master); color: var(--text-main); margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* 스크롤바 세련되게 통일 */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
@@ -35,7 +34,6 @@
 
         .workbench-container { flex: 1; display: flex; overflow: hidden; position: relative; }
         
-        /* 1단: 사이드바 (썸네일 무조건 나오도록 스펙 업) */
         .sidebar-thumbnails { width: 12%; background-color: var(--bg-header); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 15px 10px; gap: 12px; z-index: 5; min-width: 100px; height: 100%; }
         .sidebar-title { font-size: 11px; font-weight: 800; color: #d4af37; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; text-align: center; flex-shrink: 0; }
         .thumb-scroll-zone { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 2px; height: 100%; }
@@ -43,16 +41,13 @@
         .thumb-item { width: 100%; aspect-ratio: 1/1.3; border: 3px solid transparent; border-radius: 6px; cursor: pointer; opacity: 0.5; transition: all 0.2s ease; background-color: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .thumb-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .thumb-item:hover { opacity: 0.8; }
-        /* 빨간색 헤드라이트 테두리 확실하게 부여 */
         .thumb-item.active { border-color: #ef4444 !important; opacity: 1; box-shadow: 0 0 15px rgba(239, 68, 68, 0.8); transform: scale(1.02); }
         .thumb-item.pdf-type { background-color: #e2e8f0; color: #0f172a; font-weight: 800; font-size: 13px; }
         .thumb-page-badge { position: absolute; bottom: 4px; right: 4px; background: rgba(239,68,68,0.9); color: white; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 700; z-index: 2; }
 
-        /* 리사이저 스타일 */
         .resizer-bar { width: 6px; cursor: col-resize; background-color: var(--border-color); position: relative; z-index: 10; flex-shrink: 0; }
         .resizer-bar:hover, .resizer-bar.dragging { background-color: var(--accent-gold); }
 
-        /* 2단: 중앙 원본 뷰어 */
         .center-canvas { width: 42%; display: flex; flex-direction: column; background-color: var(--bg-master); height: 100%; z-index: 5; position: relative; }
         .panel-header { background-color: var(--bg-panel); padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         .panel-title { font-size: 13px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
@@ -66,11 +61,9 @@
         .dropzone-msg { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600; line-height: 1.6; margin: auto; background: rgba(0, 0, 0, 0.2); padding: 40px; border-radius: 8px; border: 2px dashed var(--border-color); cursor: pointer; transition: all 0.2s; width: 80%; }
         .dropzone-msg:hover { border-color: var(--accent-gold); background: rgba(212,175,55,0.05); }
 
-        /* ✂️ v1.2 크로퍼 전용 투명 레이어 UI */
         #crop-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; display: none; z-index: 100; background: rgba(0,0,0,0.1); }
         .crop-box { position: absolute; border: 2px dashed #ef4444; background: rgba(239, 68, 68, 0.15); pointer-events: none; }
 
-        /* 3단: 우측 에디터 패널 */
         .right-panel { flex: 1; display: flex; flex-direction: column; background-color: var(--bg-panel); height: 100%; z-index: 5; min-width: 300px; }
         .meta-inline-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.1); padding: 12px; border-radius: 6px; margin: 15px 20px 0 20px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .meta-item { display: flex; flex-direction: column; gap: 4px; }
@@ -84,37 +77,45 @@
         .card-header { background: var(--bg-header); color: #ffffff; padding: 10px 15px; font-size: 12px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); cursor: pointer; }
         .card-body { padding: 15px; display: flex; flex-direction: column; gap: 20px; }
         
-        .live-math-preview { background-color: rgba(0,0,0,0.05); border-left: 4px solid var(--accent-gold); padding: 20px; border-radius: 4px; font-size: 14.5px; line-height: 1.8; min-height: 220px; overflow-x: auto; border: 1px solid var(--border-color); white-space: pre-wrap; font-family: 'Pretendard', sans-serif; outline: none; }
-
-        /* 💡 v4.0 추가: 문항 오브젝트 단위 분리 조각 디자인 */
         .question-sub-card { background: rgba(0, 0, 0, 0.15); border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 15px; overflow: hidden; display: flex; flex-direction: column; }
         .question-sub-card.edited-active { border-color: #ef4444 !important; box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
         .q-meta-header { background: rgba(0, 0, 0, 0.25); padding: 8px 12px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
         
         .tag-badge { font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; color: #fff; }
-        .tag-num { background: #ef4444; }
-        .tag-school { background: #3b82f6; }
-        .tag-unit { background: #10b981; }
+        .tag-subj-sci { background: #10b981; }
+        .tag-subj-mat { background: #3b82f6; }
+        .tag-subj-kor { background: #ef4444; }
+        .tag-subj-eng { background: #f59e0b; }
+        .tag-num { background: #64748b; }
+        .tag-school { background: #475569; }
+        .tag-unit { background: #334155; border: 1px solid #64748b; }
         .tag-level { background: #8b5cf6; }
 
         .q-body-edit { padding: 12px; font-size: 14px; line-height: 1.8; outline: none; min-height: 60px; color: var(--text-main); background: transparent; }
+        
+        .btn-copy { padding: 4px 10px; font-size: 11px; font-weight: 800; border-radius: 4px; cursor: pointer; border: none; background-color: var(--accent-gold); color: #111c3a; transition: all 0.15s ease; }
+        .btn-copy:hover { transform: scale(1.03); opacity: 0.9; }
+
         .crop-image-holder-slot { padding: 0 12px 12px 12px; display: flex; flex-direction: column; }
-        .crop-image-holder-slot img { max-width: 100%; border: 2px solid var(--accent-gold); border-radius: 4px; margin-top: 5px; }
-        .hwp-eqn-footer { background: rgba(0,0,0,0.2); padding: 6px 12px; font-size: 11px; color: var(--accent-gold); border-top: 1px solid var(--border-color); font-family: monospace; white-space: pre-wrap; }
+        .image-asset-wrapper { position: relative; display: inline-block; width: fit-content; margin-top: 5px; }
+        .image-asset-wrapper img { max-width: 100%; border: 2px solid var(--accent-gold); border-radius: 4px; display: block; transition: border-color 0.3s ease; }
+        .btn-upscale { position: absolute; bottom: 10px; right: 10px; background: rgba(17, 28, 58, 0.85); color: #d4af37; border: 1px solid #d4af37; font-size: 11px; padding: 6px 10px; border-radius: 4px; font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; backdrop-filter: blur(2px); }
+        .btn-upscale:disabled { opacity: 0.7; cursor: not-allowed; }
 
-        /* 인간 최종 개입 수정 추적 디스플레이 */
+        .hwp-eqn-box { background: rgba(0, 0, 0, 0.25); border-top: 1px solid var(--border-color); padding: 10px 12px; width: 100%; display: block; height: auto; overflow: visible; }
+        .hwp-eqn-edit { font-size: 11px; color: #a3e635; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; word-break: break-all; outline: none; min-height: 24px; height: auto; width: 100%; overflow: visible; display: block; line-height: 1.5; padding: 4px 0; }
+
         .human-edited { background-color: rgba(234, 179, 8, 0.35); color: #ef4444; font-weight: 800; border-bottom: 1px dashed #ef4444; padding: 0 2px; }
-
-        /* 형광펜 효과 스타일 */
         .ocr-warn { background-color: rgba(234, 179, 8, 0.25); border-bottom: 2px wavy #eab308; color: #fef08a; padding: 0 2px; border-radius: 3px; font-weight: 800; }
         [data-theme="light"] .ocr-warn { color: #854d0e; background-color: rgba(234, 179, 8, 0.15); }
 
         .spinner { border: 4px solid rgba(255, 255, 255, 0.1); border-left-color: var(--accent-gold); border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; margin: 0 auto 10px auto; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .btn-action { padding: 10px 20px; font-size: 13px; font-weight: 800; border-radius: 4px; cursor: pointer; border: none; transition: all 0.15s ease; }
+        .btn-action { padding: 8px 15px; font-size: 12px; font-weight: 800; border-radius: 4px; cursor: pointer; border: none; transition: all 0.15s ease; }
         .btn-ai { background-color: var(--accent-gold); color: #111c3a; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2); }
-        .btn-save { background-color: #111c3a; color: white; border: 1px solid var(--accent-gold); }
+        .btn-save { background-color: #111c3a; color: white; border: 1px solid var(--accent-gold); padding: 10px 20px; font-size: 13px;}
+        .subject-select { padding: 7px 10px; font-size: 12px; font-weight: 800; border-radius: 4px; border: 1px solid var(--accent-gold); background: var(--bg-header); color: white; outline: none; cursor: pointer; }
 
         .workbench-footer { background: var(--bg-panel); border-top: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 10; flex-shrink: 0; }
         .toast-msg { position: fixed; bottom: 80px; right: 30px; background: #111c3a; color: white; padding: 12px 25px; border-radius: 4px; font-weight: 700; font-size: 13px; border-left: 5px solid var(--accent-gold); box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: none; z-index: 99999; }
@@ -124,17 +125,16 @@
     <header class="master-header">
         <div class="logo-group">
             <div class="logo-text">NATURE SCIENCE ACADEMY</div>
-            <h1 class="service-title">과학 기출 초정밀 복원 워크벤치 <span style="color:#d4af37; font-size:12px; font-weight:600;">v4.0 Ultimate Master</span></h1>
+            <h1 class="service-title">SOMA OS <span style="color:#d4af37; font-size:12px; font-weight:600;">v4.0 Hybrid Master</span></h1>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
             <button class="theme-toggle-btn" style="border-color:#ef4444; color:#ef4444;" onclick="toggleCropMode()" id="btn-crop">✂️ 그림 크롭 모드 (OFF)</button>
             <button class="theme-toggle-btn" onclick="toggleTheme()">🌗 테마 스타일 전환</button>
-            <span style="background-color: #2e7d32; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; color: #ffffff;">실전 구동 모드</span>
+            <span style="background-color: #2e7d32; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; color: #ffffff;">MADI 엔진 구동 중</span>
         </div>
     </header>
 
     <div class="workbench-container" id="workbench">
-        
         <div class="sidebar-thumbnails" id="sidebar-thumbs">
             <div class="sidebar-title">📑 BOOK PAGES</div>
             <div class="thumb-scroll-zone" id="thumb-container"></div>
@@ -144,16 +144,24 @@
 
         <div class="center-canvas" id="canvas-panel">
             <div class="panel-header">
-                <div class="panel-title">📁 원본 출판사 PDF / 기출 스캔 뷰어</div>
-                <button type="button" class="btn-action btn-ai" onclick="triggerFileSelect()">🚀 스캔본 / PDF 파일 대량 업로드</button>
-                <input type="file" id="hidden-file-input" multiple accept="image/*, application/pdf" style="display:none;" onchange="handleMultiFileSelect(event)">
+                <div class="panel-title">📁 스캔본 뷰어</div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <select id="subject-selector" class="subject-select">
+                        <option value="SCI">🧬 과학 (SCI)</option>
+                        <option value="MAT">📐 수학 (MAT)</option>
+                        <option value="KOR">📖 국어 (KOR)</option>
+                        <option value="ENG">🔠 영어 (ENG)</option>
+                    </select>
+                    <button type="button" class="btn-action btn-ai" onclick="triggerFileSelect()">🚀 대량 업로드 (MADI 분석)</button>
+                    <input type="file" id="hidden-file-input" multiple accept="image/*, application/pdf" style="display:none;" onchange="handleMultiFileSelect(event)">
+                </div>
             </div>
             
             <div class="center-scroll-zone" id="center-image-container">
                 <div class="dropzone-msg" id="upload-msg-box" onclick="triggerFileSelect()">
                     <span style="font-size: 45px; display:block; margin-bottom:12px;">📚</span>
                     출판사 정품 PDF 또는 스캔본 파일들을 드롭하세요.<br>
-                    <span style="font-size:11px; color:var(--accent-gold); font-weight:700;">(문항 분리 슬라이싱 및 이미지 크로퍼 탑재 완료)</span>
+                    <span style="font-size:11px; color:var(--accent-gold); font-weight:700;">(다형성 문항 슬라이싱 및 이미지 크로퍼 탑재 완료)</span>
                 </div>
             </div>
             <div id="crop-overlay"></div>
@@ -163,9 +171,9 @@
 
         <div class="right-panel" id="editor-panel">
             <div class="meta-inline-row">
-                <div class="meta-item"><label>최종 검수자</label><input type="text" value="최종 관리자" readonly></div>
-                <div class="meta-item"><label>최초 작성자</label><input type="text" value="Gemini AI Engine" readonly></div>
-                <div class="meta-item"><label>데이터 적재함</label><input type="text" value="수성구_기출_DB" readonly></div>
+                <div class="meta-item"><label>최종 검수자</label><input type="text" value="성태형 (관리자)" readonly></div>
+                <div class="meta-item"><label>최초 작성자</label><input type="text" value="MADI AI Engine" readonly></div>
+                <div class="meta-item"><label>데이터 적재함</label><input type="text" value="SYNAP_공유_DB" readonly></div>
             </div>
 
             <div class="editor-workspace" id="cards-arena"></div>
@@ -174,18 +182,17 @@
 
     <footer class="workbench-footer">
         <div style="font-size:12.5px; font-weight:600; color:var(--text-muted);">
-            💡 기획 관리자 모드: 단축키 <kbd style="background:var(--bg-master); padding:2px 5px; border-radius:3px; border:1px solid var(--border-color);">Cmd + S</kbd> 작동 시 데이터가 무결점으로 즉시 적재됩니다.
+            💡 SOMA OS 단축키: <kbd style="background:var(--bg-master); padding:2px 5px; border-radius:3px; border:1px solid var(--border-color);">Cmd + S</kbd> 작동 시 데이터가 무결점으로 즉시 적재됩니다.
         </div>
         <div style="display:flex; gap:10px;">
-            <button type="button" class="btn-action btn-save" style="background:#2563eb; border-color:#3b82f6;" onclick="downloadServerHWP()">📥 전체 문항 HWP 원클릭 직접 다운로드</button>
-            <button type="button" class="btn-action btn-save" onclick="showToast('✨ 성공! 최종 관리자 검수 승인 마크가 태깅되어 네이처 과학 DB 인프라에 안전하게 적재되었습니다!')">✔️ 이력 태깅 완료 및 네이처 문제은행 최종 적재</button>
+            <button type="button" class="btn-action btn-save" style="background:#2563eb; border-color:#3b82f6;" onclick="downloadServerHWP()">🌐 SYNAP 원클릭 HWP 다운로드</button>
+            <button type="button" class="btn-action btn-save" onclick="showToast('✨ 성공! 최종 승인 마크가 태깅되어 SYNAP 인프라에 안전하게 적재되었습니다!')">✔️ 이력 태깅 완료 및 문제은행 최종 적재</button>
         </div>
     </footer>
 
     <div class="toast-msg" id="toast-box"></div>
 
     <script>
-        // 전역 메모리 적재소 배열 변수 (인라인 수정본 및 파일 다운로드용 상태 추적)
         let globalPagesQuestionsData = {};
 
         function toggleTheme() {
@@ -193,253 +200,255 @@
             html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         }
 
-        // 창 크기 제어용 듀얼 리사이저 로직
         let activeResizer = null;
         document.getElementById('resizer-left').addEventListener('mousedown', () => { activeResizer = 'left'; window.addEventListener('mousemove', doDrag); window.addEventListener('mouseup', stopDrag); });
         document.getElementById('resizer-right').addEventListener('mousedown', () => { activeResizer = 'right'; window.addEventListener('mousemove', doDrag); window.addEventListener('mouseup', stopDrag); });
 
         function doDrag(e) {
-            if (activeResizer === 'left') {
-                document.getElementById('sidebar-thumbs').style.width = Math.max(80, e.clientX) + 'px';
-            } else if (activeResizer === 'right') {
-                const sidebarWidth = document.getElementById('sidebar-thumbs').clientWidth;
-                document.getElementById('canvas-panel').style.width = Math.max(200, e.clientX - sidebarWidth - 6) + 'px';
-            }
+            if (activeResizer === 'left') { document.getElementById('sidebar-thumbs').style.width = Math.max(80, e.clientX) + 'px'; } 
+            else if (activeResizer === 'right') { const sidebarWidth = document.getElementById('sidebar-thumbs').clientWidth; document.getElementById('canvas-panel').style.width = Math.max(200, e.clientX - sidebarWidth - 6) + 'px'; }
         }
         function stopDrag() { window.removeEventListener('mousemove', doDrag); window.removeEventListener('mouseup', stopDrag); activeResizer = null; }
 
         function triggerFileSelect() { document.getElementById('hidden-file-input').click(); }
         function handleMultiFileSelect(event) { if (event.target.files.length > 0) processFiles(event.target.files); }
 
-        // 현재 마우스가 어디 있는지 판별하는 호버 플래그 (무한 루프 방지 핵심)
         let activeHoverZone = 'center';
         document.getElementById('thumb-container').addEventListener('mouseenter', () => activeHoverZone = 'left');
         document.getElementById('center-image-container').addEventListener('mouseenter', () => activeHoverZone = 'center');
         document.getElementById('cards-arena').addEventListener('mouseenter', () => activeHoverZone = 'right');
 
-        // ==========================================
-        // 💡 실시간 초정밀 3단 스크롤 동기화 연동 모듈
-        // ==========================================
         const centerPane = document.getElementById('center-image-container');
         const rightPane = document.getElementById('cards-arena');
-        const leftPane = document.getElementById('thumb-container');
-
-        // 1. 가운데 원본 창을 스크롤할 때 좌/우 창 동기화
-        centerPane.addEventListener('scroll', () => {
-            if (activeHoverZone !== 'center') return;
-            syncPanesFromCenter();
-        });
-
-        // 2. 우측 에디터 창을 스크롤할 때 좌/중 창 동기화
-        rightPane.addEventListener('scroll', () => {
-            if (activeHoverZone !== 'right') return;
-            syncPanesFromRight();
-        });
+        centerPane.addEventListener('scroll', () => { if (activeHoverZone !== 'center') return; syncPanesFromCenter(); });
+        rightPane.addEventListener('scroll', () => { if (activeHoverZone !== 'right') return; syncPanesFromRight(); });
 
         function syncPanesFromCenter() {
             const wrappers = document.querySelectorAll('.center-item-wrapper');
-            let activeIdx = 0;
-            let minDiff = Infinity;
-
-            wrappers.forEach((wrap, i) => {
-                const rect = wrap.getBoundingClientRect();
-                const diff = Math.abs(rect.top - 140); // 헤더 마진 보정 계산
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    activeIdx = i;
-                }
-            });
-
+            let activeIdx = 0, minDiff = Infinity;
+            wrappers.forEach((wrap, i) => { const diff = Math.abs(wrap.getBoundingClientRect().top - 140); if (diff < minDiff) { minDiff = diff; activeIdx = i; } });
             highlightElements(activeIdx, 'center');
         }
 
         function syncPanesFromRight() {
             const cards = document.querySelectorAll('.restorer-card');
-            let activeIdx = 0;
-            let minDiff = Infinity;
-
-            cards.forEach((card, i) => {
-                const rect = card.getBoundingClientRect();
-                const diff = Math.abs(rect.top - 140);
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    activeIdx = i;
-                }
-            });
-
+            let activeIdx = 0, minDiff = Infinity;
+            cards.forEach((card, i) => { const diff = Math.abs(card.getBoundingClientRect().top - 140); if (diff < minDiff) { minDiff = diff; activeIdx = i; } });
             highlightElements(activeIdx, 'right');
         }
 
-        // 화면 강조 처리 및 타겟 이동 통합 제어기
         function highlightElements(idx, triggerZone) {
-            // 왼쪽 썸네일 하이라이트
             document.querySelectorAll('.thumb-item').forEach(el => el.classList.remove('active'));
             const activeThumb = document.getElementById(`thumb-${idx}`);
-            if (activeThumb) {
-                activeThumb.classList.add('active');
-                if (triggerZone !== 'left') {
-                    activeThumb.scrollIntoView({ block: 'nearest', behavior: 'auto' });
-                }
-            }
+            if (activeThumb) { activeThumb.classList.add('active'); if (triggerZone !== 'left') activeThumb.scrollIntoView({ block: 'nearest', behavior: 'auto' }); }
 
-            // 오른쪽 에디터 카드 하이라이트
             document.querySelectorAll('.restorer-card').forEach(el => el.classList.remove('active-card'));
             const activeCard = document.getElementById(`card-wrap-${idx}`);
-            if (activeCard) {
-                activeCard.classList.add('active-card');
-                if (triggerZone === 'center') {
-                    activeCard.scrollIntoView({ block: 'nearest', behavior: 'auto' });
-                }
-            }
+            if (activeCard) { activeCard.classList.add('active-card'); if (triggerZone === 'center') activeCard.scrollIntoView({ block: 'nearest', behavior: 'auto' }); }
 
-            // 가운데 원본 뷰어 이동 (좌측 클릭이나 우측 스크롤 시에만 작동)
-            if (triggerZone !== 'center') {
-                const activeCenter = document.getElementById(`center-wrap-${idx}`);
-                if (activeCenter) {
-                    activeCenter.scrollIntoView({ block: 'start', behavior: 'auto' });
-                }
-            }
+            if (triggerZone !== 'center') { const activeCenter = document.getElementById(`center-wrap-${idx}`); if (activeCenter) activeCenter.scrollIntoView({ block: 'start', behavior: 'auto' }); }
         }
 
-        // 왼쪽 썸네일 클릭 시 3단 다이렉트 점프 연동 기능
-        function jumpToPage(index) {
-            activeHoverZone = 'left'; // 일시적으로 제어권 고정
-            highlightElements(index, 'left');
-            setTimeout(() => { activeHoverZone = 'center'; }, 100);
+        function jumpToPage(index) { activeHoverZone = 'left'; highlightElements(index, 'left'); setTimeout(() => { activeHoverZone = 'center'; }, 100); }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
-        // ==========================================
-        // 💡 썸네일 이미지 100% 노출 및 파일 디바인더
-        // ==========================================
         function processFiles(files) {
             const thumbContainer = document.getElementById('thumb-container');
             const centerContainer = document.getElementById('center-image-container');
             const cardsArena = document.getElementById('cards-arena');
             const msgBox = document.getElementById('upload-msg-box');
+            const selectedSubject = document.getElementById('subject-selector').value;
 
             thumbContainer.innerHTML = ''; centerContainer.innerHTML = ''; cardsArena.innerHTML = '';
             if(msgBox) msgBox.style.display = 'none';
-            globalPagesQuestionsData = {}; // 저장소 리셋
+            globalPagesQuestionsData = {}; 
 
             Array.from(files).forEach((file, index) => {
                 const isPDF = file.type === 'application/pdf';
                 const fileUrl = URL.createObjectURL(file);
 
-                // 1. 왼쪽 썸네일 생성
                 const thumb = document.createElement('div');
                 thumb.className = `thumb-item ${isPDF ? 'pdf-type' : ''}`;
                 thumb.id = `thumb-${index}`;
                 thumb.onclick = () => jumpToPage(index);
-                
-                if (isPDF) {
-                    thumb.innerHTML = `<span style="font-size:24px; margin-bottom:5px;">📄</span>PDF<br><span style="font-size:10px; color:#475569; font-weight:700;">P. ${index + 1}</span>`;
-                } else {
-                    thumb.innerHTML = `<img src="${fileUrl}" draggable="false"><span class="thumb-page-badge">${index + 1}</span>`;
-                }
+                if (isPDF) thumb.innerHTML = `<span style="font-size:24px; margin-bottom:5px;">📄</span>PDF<br><span style="font-size:10px; color:#475569; font-weight:700;">P. ${index + 1}</span>`;
+                else thumb.innerHTML = `<img src="${fileUrl}" draggable="false"><span class="thumb-page-badge">${index + 1}</span>`;
                 thumbContainer.appendChild(thumb);
 
-                // 2. 가운데 원본 프레임 생성
                 const centerWrap = document.createElement('div');
                 centerWrap.className = 'center-item-wrapper';
                 centerWrap.id = `center-wrap-${index}`;
-                centerWrap.dataset.id = index;
-                centerWrap.innerHTML = `<div class="page-badge">📄 PAGE ${index + 1} 원본</div>`;
-                
-                let mediaElement = isPDF ? `<iframe src="${fileUrl}#toolbar=0&view=FitH" class="center-item"></iframe>` : `<img src="${fileUrl}" class="center-item">`;
-                centerWrap.innerHTML += mediaElement;
+                centerWrap.innerHTML = `<div class="page-badge">📄 PAGE ${index + 1} 원본</div>${isPDF ? `<iframe src="${fileUrl}#toolbar=0&view=FitH" class="center-item"></iframe>` : `<img src="${fileUrl}" class="center-item">`}`;
                 centerContainer.appendChild(centerWrap);
 
-                // 3. 우측 AI 결과물 편집 패널 매핑 (v4.0 낱개 분리 카드 수용 아키텍처)
                 const card = document.createElement('div');
                 card.className = 'restorer-card';
                 card.id = `card-wrap-${index}`;
-                card.dataset.id = index;
                 card.innerHTML = `
                     <div class="card-header" onclick="jumpToPage(${index})">
-                        <span>🎯 페이지 ${index + 1} 실시간 문항별 분리 복원</span>
-                        <button class="btn-copy" onclick="event.stopPropagation(); copyToHWP('preview-${index}', ${index})">📋 페이지 전체 HWP 복사</button>
+                        <span>🎯 페이지 ${index + 1} 다형성 문항 슬라이싱 (${selectedSubject})</span>
+                        <button class="btn-copy" onclick="event.stopPropagation(); copyToHWP(${index})">📋 전체 HWP 복사</button>
                     </div>
                     <div class="card-body" id="preview-${index}">
                         <div class="spinner" style="display:block; margin: 20px auto;"></div>
-                        <div style="text-align:center; color:var(--accent-gold); font-size:13px; font-weight:700;">⚡ 3.5 Flash 엔진이 문항 분리 및 자동 태깅 작업을 처리하고 있습니다...</div>
+                        <div style="text-align:center; color:var(--accent-gold); font-size:13px; font-weight:700;">⚡ MADI 엔진이 [${selectedSubject}] 지침에 따라 1단 전처리 및 분할 중입니다...</div>
                     </div>
                 `;
                 cardsArena.appendChild(card);
 
-                // 통신 라우터 기동
-                callGeminiAPI(file, index);
+                callGeminiAPI(file, index, selectedSubject);
             });
-
-            // 업로드 완료 직후 첫 페이지를 자동으로 하이라이트 세팅
             setTimeout(() => { highlightElements(0, 'left'); }, 300);
         }
 
-        // ==========================================
-        // 💡 v4.0 통합: 문항 자동 분리 & 태깅 렌더링 파이프라인
-        // ==========================================
-        async function callGeminiAPI(file, index) {
+        // 💡 [동기화 엔진 초정밀 재설계 - 정규식 폐기, DOM 가상 파서 도입]
+        // 앱 상단의 <보기> 박스와 밑줄 요소가 하단 HWP 코드로 내려갈 때 절대 훼손되지 않도록 완벽 보존 처리합니다.
+        function htmlToHwpEqn(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // 1. 박스 요소를 안전한 [BOX] 태그로 변환
+            const allNodes = doc.body.querySelectorAll('*');
+            allNodes.forEach(el => {
+                const style = el.getAttribute('style') || '';
+                const className = el.getAttribute('class') || '';
+                if (el.tagName === 'FIELDSET' || style.includes('border') || className.includes('box')) {
+                    const boxText = doc.createTextNode(`\n[BOX]\n${el.innerHTML}\n[/BOX]\n`);
+                    el.parentNode.replaceChild(boxText, el);
+                }
+            });
+
+            let text = doc.body.innerHTML;
+            
+            // 2. 밑줄, 하이라이트 보존
+            text = text.replace(/<u[^>]*>([\s\S]*?)<\/u>/gi, '[U]$1[/U]');
+            text = text.replace(/<mark[^>]*>([\s\S]*?)<\/mark>/gi, '[MARK]$1[/MARK]');
+            
+            // 3. 분수 및 첨자를 HWP 수식 규격으로 역변환
+            text = text.replace(/<span class="fraction"[^>]*><sup[^>]*>(.*?)<\/sup>&frasl;<sub[^>]*>(.*?)<\/sub><\/span>/gi, '{$1} over {$2}');
+            text = text.replace(/<sup[^>]*>(.*?)<\/sup>/gi, '^{$1}');
+            text = text.replace(/<sub[^>]*>(.*?)<\/sub>/gi, '_{$1}');
+            
+            text = text.replace(/<br\s*\/?>/gi, '\n');
+            text = text.replace(/<\/p>/gi, '\n');
+            text = text.replace(/<[^>]+>/g, ''); // 나머지 불필요 태그 소거
+            text = text.replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+            
+            return text.trim();
+        }
+
+        function hwpEqntoHtml(hwp) {
+            let html = escapeHTML(hwp); 
+            html = html.replace(/\n/g, '<br>');
+            
+            // 💡 1. [BOX] 태그를 웹에서 가장 보기 좋은 라운딩 테두리 박스로 복원
+            html = html.replace(/\[BOX\](?:<br>)?([\s\S]*?)(?:<br>)?\[\/BOX\]/gi, '<div style="border:1px solid #333; padding:12px; margin:15px 0; border-radius:4px;">$1</div>');
+            
+            // 2. 서식 복원
+            html = html.replace(/\[U\]([\s\S]*?)\[\/U\]/gi, '<u>$1</u>');
+            html = html.replace(/\[MARK\]([\s\S]*?)\[\/MARK\]/gi, '<mark class="ocr-warn" title="AI 판독 불확실">$1</mark>');
+            
+            // 3. 분수 및 수식 복원
+            html = html.replace(/\{([^{}]*?)\}\s*over\s*\{([^{}]*?)\}/gi, '<span class="fraction"><sup style="font-size:85%;">$1</sup>&frasl;<sub style="font-size:85%;">$2</sub></span>');
+            html = html.replace(/\{([^{}]*?)\}_\{([^{}]*?)\}/g, '$1<sub>$2</sub>');
+            html = html.replace(/\{([^{}]*?)\}\^\{([^{}]*?)\}/g, '$1<sup>$2</sup>');
+            html = html.replace(/_\{([^{}]*?)\}/g, '<sub>$1</sub>');
+            html = html.replace(/\^\{([^{}]*?)\}/g, '<sup>$1</sup>');
+            
+            return html;
+        }
+
+        async function callGeminiAPI(file, index, subjectCode) {
             const preview = document.getElementById(`preview-${index}`);
             const formData = new FormData();
             formData.append('image', file);
+            formData.append('subject', subjectCode);
 
             try {
-                // v4.0 JSON 엔드포인트 호출
                 const response = await fetch('http://localhost:4000/api/analyze', { method: 'POST', body: formData });
                 const data = await response.json();
 
                 if (response.ok && data.questions) {
-                    // 메모리에 파싱 객체 데이터 전역 보존
                     globalPagesQuestionsData[index] = data.questions;
-                    
-                    // 프리뷰 컨테이너 청소 후 독립 문항 카드 렌더링
                     preview.innerHTML = '';
                     
                     data.questions.forEach((q, qIdx) => {
                         const subCard = document.createElement('div');
                         subCard.className = 'question-sub-card';
-                        subCard.id = `sub-card-${index}-${qIdx}`;
+                        
+                        const categoryStr = Array.isArray(q.category_hierarchy) ? q.category_hierarchy.join(' > ') : q.unit_tag || '분류 미상';
+                        const subjColorClass = q.subject_code === 'SCI' ? 'tag-subj-sci' : q.subject_code === 'MAT' ? 'tag-subj-mat' : q.subject_code === 'KOR' ? 'tag-subj-kor' : 'tag-subj-eng';
+
                         subCard.innerHTML = `
-                            <div class="q-meta-header">
+                            <div class="q-meta-header" style="user-select:none;">
+                                <span class="tag-badge ${subjColorClass}">${q.subject_code}</span>
                                 <span class="tag-badge tag-num">${q.q_num}</span>
                                 <span class="tag-badge tag-school">${q.school}</span>
-                                <span class="tag-badge tag-unit">${q.unit_tag}</span>
+                                <span class="tag-badge tag-unit">${categoryStr}</span>
                                 <span class="tag-badge tag-level">${q.type} | 난이도:${q.level}</span>
-                                <button class="btn-copy" style="margin-left:auto; font-size:10px; padding:2px 6px; background:#ef4444; color:white; border:none; border-radius:3px;" onclick="insertCroppedImageToSlot(${index}, ${qIdx})">✂️ 그림 삽입</button>
+                                <button class="btn-copy" style="margin-left:auto; font-size:10px; padding:2px 6px; background:#ef4444; color:white;" onclick="insertCroppedImageToSlot(${index}, ${qIdx})">✂️ 그림 삽입</button>
+                                <button class="btn-copy" style="margin-left:6px; font-size:10px; padding:2px 6px; background:#2563eb; color:white;" onclick="event.stopPropagation(); copyQuestionToHWP(${index}, ${qIdx})">📋 문항 복사</button>
                             </div>
                             <div class="q-body-edit" contenteditable="true" spellcheck="false" id="q-body-text-${index}-${qIdx}">
                                 ${q.html_text}
                             </div>
                             <div class="crop-image-holder-slot" id="crop-slot-${index}-${qIdx}"></div>
-                            <div class="hwp-eqn-footer">※ 한글 수식 코드: ${q.hwp_eqn}</div>
+                            <div class="hwp-eqn-box">
+                                <span style="font-size: 10px; color: var(--accent-gold); font-weight: 800; display: block; margin-bottom: 4px; user-select: none;">※ 한글 조립 코드 (실시간 양방향 연동 필드)</span>
+                                <div class="hwp-eqn-edit" contenteditable="true" spellcheck="false" id="hwp-eqn-text-${index}-${qIdx}">${escapeHTML(q.hwp_eqn)}</div>
+                            </div>
                         `;
                         preview.appendChild(subCard);
 
-                        // 💡 2.1 인라인 실시간 변경 이력 추적 장치 바인딩
-                        const editableZone = document.getElementById(`q-body-text-${index}-${qIdx}`);
-                        editableZone.addEventListener('input', () => {
-                            subCard.classList.add('edited-active'); // 변경 시 카드 테두리 레드라이트 점등
-                            // 전역 동기화 데이터 업데이트
-                            globalPagesQuestionsData[index][qIdx].html_text = editableZone.innerHTML;
+                        const bodyEditEl = document.getElementById(`q-body-text-${index}-${qIdx}`);
+                        const eqnEditEl = document.getElementById(`hwp-eqn-text-${index}-${qIdx}`);
+
+                        // 양방향 무한루프 방어용 Lock 장치
+                        bodyEditEl.addEventListener('input', (e) => {
+                            if (bodyEditEl.dataset.updating === "true") return;
+                            subCard.classList.add('edited-active');
+                            const currentHtml = e.target.innerHTML;
+                            globalPagesQuestionsData[index][qIdx].html_text = currentHtml;
+                            
+                            const computedHwp = htmlToHwpEqn(currentHtml);
+                            globalPagesQuestionsData[index][qIdx].hwp_eqn = computedHwp;
+                            
+                            if (eqnEditEl.innerText !== computedHwp) {
+                                eqnEditEl.dataset.updating = "true";
+                                eqnEditEl.innerText = computedHwp;
+                                setTimeout(() => eqnEditEl.dataset.updating = "false", 10);
+                            }
+                        });
+
+                        eqnEditEl.addEventListener('input', (e) => {
+                            if (eqnEditEl.dataset.updating === "true") return;
+                            subCard.classList.add('edited-active');
+                            const currentHwp = e.target.innerText;
+                            globalPagesQuestionsData[index][qIdx].hwp_eqn = currentHwp;
+                            
+                            const computedHtml = hwpEqntoHtml(currentHwp);
+                            globalPagesQuestionsData[index][qIdx].html_text = computedHtml;
+                            
+                            if (bodyEditEl.innerHTML !== computedHtml) {
+                                bodyEditEl.dataset.updating = "true";
+                                bodyEditEl.innerHTML = computedHtml;
+                                setTimeout(() => bodyEditEl.dataset.updating = "false", 10);
+                            }
                         });
                     });
-
                 } else {
                     preview.innerHTML = "❌ 에러 발생: " + (data.error || "알 수 없는 오류");
                 }
             } catch (error) {
-                preview.innerHTML = "❌ <b>서버 연결 실패!</b> 4000번 서버 가동 상태를 검사해 주세요 형.";
+                preview.innerHTML = "❌ <b>서버 연결 실패!</b> 4000번 포트 MADI 엔진 구동을 확인하세요.";
             }
         }
 
-        // ==========================================
-        // 💡 1.2 시각 자료 이미지 크로퍼 엔진 제어 모듈
-        // ==========================================
-        let cropModeActive = false;
-        let isDragging = false;
-        let startX, startY;
-        let cropBoxElement = null;
-        let lastCroppedDataUrlString = null;
-
+        let cropModeActive = false, isDragging = false, startX, startY, cropBoxElement = null, lastCroppedDataUrlString = null;
         const cropOverlay = document.getElementById('crop-overlay');
 
         function toggleCropMode() {
@@ -451,194 +460,222 @@
             cropOverlay.style.display = cropModeActive ? 'block' : 'none';
         }
 
-        cropOverlay.addEventListener('mousedown', e => {
-            if(!cropModeActive) return;
-            isDragging = true;
-            startX = e.offsetX;
-            startY = e.offsetY;
-            cropBoxElement = document.createElement('div');
-            cropBoxElement.className = 'crop-box';
-            cropBoxElement.style.left = startX + 'px';
-            cropBoxElement.style.top = startY + 'px';
-            cropOverlay.appendChild(cropBoxElement);
-        });
-
-        cropOverlay.addEventListener('mousemove', e => {
-            if(!isDragging) return;
-            const currentX = e.offsetX;
-            const currentY = e.offsetY;
-            cropBoxElement.style.width = Math.abs(currentX - startX) + 'px';
-            cropBoxElement.style.height = Math.abs(currentY - startY) + 'px';
-            cropBoxElement.style.left = Math.min(currentX, startX) + 'px';
-            cropBoxElement.style.top = Math.min(currentY, startY) + 'px';
-        });
-
-        cropOverlay.addEventListener('mouseup', (e) => {
-            if(!isDragging) return;
-            isDragging = false;
-
-            // 스크롤 동기화 기준으로 현재 하이라이트 활성화된 중앙 이미지 래퍼 타겟팅
-            const activeThumb = document.querySelector('.thumb-item.active');
-            if(!activeThumb) return;
-            const activeIdx = activeThumb.id.replace('thumb-', '');
-            const imgElement = document.querySelector(`#center-wrap-${activeIdx} .center-item`);
-
-            if (!imgElement || imgElement.tagName === 'IFRAME') {
-                alert('⚠️ 크롭 기능은 이미지 파일 형식의 기출 스캔본에서만 안정적으로 작동합니다, 형.');
-                cropOverlay.innerHTML = '';
-                return;
-            }
-
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            const scaleX = imgElement.naturalWidth / imgElement.clientWidth;
-            const scaleY = imgElement.naturalHeight / imgElement.clientHeight;
-
-            const rect = cropBoxElement.getBoundingClientRect();
-            const overlayRect = cropOverlay.getBoundingClientRect();
-
-            canvas.width = rect.width * scaleX;
-            canvas.height = rect.height * scaleY;
-
-            ctx.drawImage(imgElement, 
-                (rect.left - overlayRect.left) * scaleX, 
-                (rect.top - overlayRect.top) * scaleY, 
-                canvas.width, canvas.height,
-                0, 0, canvas.width, canvas.height
-            );
-
-            lastCroppedDataUrlString = canvas.toDataURL('image/png');
-            cropOverlay.innerHTML = ''; // 캔버스 드래그 박스 박멸 청소
-            alert('✂️ 과학 그래픽 자료 크롭 캡처 완료! 원하는 문항 카드의 [그림 삽입] 단추를 누르세요.');
+        cropOverlay.addEventListener('mousedown', e => { if(!cropModeActive) return; isDragging = true; startX = e.offsetX; startY = e.offsetY; cropBoxElement = document.createElement('div'); cropBoxElement.className = 'crop-box'; cropBoxElement.style.left = startX + 'px'; cropBoxElement.style.top = startY + 'px'; cropOverlay.appendChild(cropBoxElement); });
+        cropOverlay.addEventListener('mousemove', e => { if(!isDragging) return; cropBoxElement.style.width = Math.abs(e.offsetX - startX) + 'px'; cropBoxElement.style.height = Math.abs(e.offsetY - startY) + 'px'; cropBoxElement.style.left = Math.min(e.offsetX, startX) + 'px'; cropBoxElement.style.top = Math.min(e.offsetY, startY) + 'px'; });
+        cropOverlay.addEventListener('mouseup', () => {
+            if(!isDragging) return; isDragging = false;
+            const activeThumb = document.querySelector('.thumb-item.active'); if(!activeThumb) return;
+            const imgElement = document.querySelector(`#center-wrap-${activeThumb.id.replace('thumb-', '')} .center-item`);
+            if (!imgElement || imgElement.tagName === 'IFRAME') { alert('⚠️ 이미지 스캔본에서만 크롭이 지원됩니다.'); cropOverlay.innerHTML = ''; return; }
+            
+            const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+            const scaleX = imgElement.naturalWidth / imgElement.clientWidth; const scaleY = imgElement.naturalHeight / imgElement.clientHeight;
+            const rect = cropBoxElement.getBoundingClientRect(); const overlayRect = cropOverlay.getBoundingClientRect();
+            
+            canvas.width = rect.width * scaleX; canvas.height = rect.height * scaleY;
+            ctx.drawImage(imgElement, (rect.left - overlayRect.left) * scaleX, (rect.top - overlayRect.top) * scaleY, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+            
+            lastCroppedDataUrlString = canvas.toDataURL('image/png'); cropOverlay.innerHTML = '';
+            alert('✂️ 자산 크롭 캡처 완료! 카드에 삽입하세요.');
         });
 
         function insertCroppedImageToSlot(pageIdx, qIdx) {
-            if(!lastCroppedDataUrlString) return alert('먼저 왼쪽 원본 뷰어 판넬에서 크롭 드래그를 실행해 주세요.');
-            const slot = document.getElementById(`crop-slot-${pageIdx}-${qIdx}`);
-            slot.innerHTML = `<label style="font-size:10px; color:var(--accent-gold); font-weight:800; margin-top:10px;">[연동 시각 그래픽 자산]</label><img src="${lastCroppedDataUrlString}">`;
+            if(!lastCroppedDataUrlString) return alert('먼저 크롭 드래그를 실행해 주세요.');
             
-            // 전역 오브젝트 데이터에 크롭 이미지 바인딩 정보 주입
+            const slot = document.getElementById(`crop-slot-${pageIdx}-${qIdx}`);
+            slot.innerHTML = `
+                <label class="system-exclude-label" style="font-size:10px; color:var(--accent-gold); font-weight:800; margin-top:10px; display:block;">[연동 그래픽 자산]</label>
+                <div class="image-asset-wrapper">
+                    <img src="${lastCroppedDataUrlString}" id="asset-img-${pageIdx}-${qIdx}">
+                    <button class="btn-upscale" onclick="requestUpscale(event, ${pageIdx}, ${qIdx})">⚡ 프리미엄 화질 상향</button>
+                </div>
+            `;
             if(globalPagesQuestionsData[pageIdx] && globalPagesQuestionsData[pageIdx][qIdx]) {
-                globalPagesQuestionsData[pageIdx][qIdx].has_image = true;
                 globalPagesQuestionsData[pageIdx][qIdx].image_data = lastCroppedDataUrlString;
             }
         }
 
-        // ==========================================
-        // 💡 3.2 핵심: 서버사이드 변환 엔진 연동 원클릭 HWP 다운로드 
-        // ==========================================
-        async function downloadServerHWP() {
-            // 구조화된 전역 데이터 수집 취합
-            const allQuestions = [];
-            Object.keys(globalPagesQuestionsData).forEach(pageKey => {
-                globalPagesQuestionsData[pageKey].forEach(q => {
-                    allQuestions.push(q);
-                });
-            });
-
-            if(allQuestions.length === 0) return alert('네이처 운영 OS에 로드된 문항 데이터 조각 자산이 존재하지 않습니다.');
-
-            showToast('📥 차세대 변환 파이프라인 가동 - 정품 .HWP 문서 직접 빌드 중...');
-
+        async function requestUpscale(event, pageIdx, qIdx) {
+            const btn = event.currentTarget;
+            btn.innerText = "⏳ 화질 상향 처리 중...";
+            btn.disabled = true;
+            
             try {
-                const res = await fetch('http://localhost:4000/api/download-hwp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ questions: allQuestions })
+                const response = await fetch('http://localhost:4000/api/upscale-image', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ 
+                        imageBase64: globalPagesQuestionsData[pageIdx][qIdx].image_data,
+                        franchiseId: '본원' 
+                    }) 
                 });
-
-                if(!res.ok) throw new Error('서버 다운로드 생성 에러');
                 
-                const blob = await res.blob();
-                const downloadUrl = window.URL.createObjectURL(blob);
-                const anchor = document.createElement('a');
-                anchor.href = downloadUrl;
-                anchor.download = '네이처_과학_기출_자산_마스터.hwp';
-                document.body.appendChild(anchor);
-                anchor.click();
-                anchor.remove();
-                showToast('🚀 빌드 성공! 정품 한글 파일 포맷이 다운로드되었습니다.');
-            } catch (err) {
-                alert('❌ HWP 파일 생성 엔진 통신 실패. server.js 구동 상태를 확인하세요 형.');
+                const data = await response.json();
+                if(response.ok && data.success) {
+                    const imgEl = document.getElementById(`asset-img-${pageIdx}-${qIdx}`);
+                    imgEl.src = data.upscaledImage;
+                    imgEl.style.borderColor = '#10b981'; 
+                    
+                    btn.style.background = '#10b981';
+                    btn.style.borderColor = '#10b981';
+                    btn.style.color = 'white';
+                    btn.innerText = "✨ 화질 상향 완료";
+                    showToast("✨ " + data.message);
+                } else {
+                    throw new Error(data.error || '업스케일 실패');
+                }
+            } catch(error) {
+                alert("❌ 상향 서버 통신 오류: " + error.message);
+                btn.innerText = "⚡ 프리미엄 화질 상향 (재시도)";
+                btn.disabled = false;
             }
         }
 
-        // ==========================================
-        // 💡 기존의 테마 오염 한글 클립보드 세탁 복사 엔진 (v4.0 낱개 대응 개조)
-        // ==========================================
-        function copyToHWP(previewId, pageIndex) {
-            const pageData = globalPagesQuestionsData[pageIndex];
-            if(!pageData || pageData.length === 0) return alert('복원 완료된 문항 데이터가 없습니다.');
+        // 💡 [HWP 파서 돌파 엔진 - 핵심 병목 해결]
+        function applyHWPFormatting(html) {
+            if (!html) return html;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
 
-            const sandbox = document.createElement('div');
-            
-            // 한글 매핑 호환용 격자 구조 직조
-            pageData.forEach(q => {
-                sandbox.innerHTML += `
-                <table border="1" style="border-collapse:collapse; width:100%; margin-bottom:20px; border-color:#000000;">
-                    <tr><td style="background:#f1f5f9; font-weight:bold; padding:8px; font-size:11pt; color:#000000;">
-                        [${q.q_num}] ${q.school} | ${q.unit_tag} (난이도: ${q.level})
-                    </td></tr>
-                    <tr><td style="padding:15px; font-size:11pt; color:#000000; line-height:1.8;">
-                        ${q.html_text}
-                    </td></tr>
-                </table>`;
-            });
-            
-            sandbox.style.color = '#000000';
-            sandbox.style.backgroundColor = '#ffffff';
-            sandbox.style.fontFamily = "'Pretendard', sans-serif";
-            
-            const allElements = sandbox.querySelectorAll('*');
-            allElements.forEach(el => {
-                el.style.color = '#000000';
-                if (el.tagName === 'TABLE' || el.tagName === 'TH' || el.tagName === 'TD') {
-                    el.style.borderColor = '#000000';
-                    el.style.borderStyle = 'solid';
-                    el.setAttribute('border', '1');
+            // 1. [테두리 증발 해결] 웹의 모든 박스(div, fieldset)를 한글 HWP가 강제로 테두리를 그릴 수밖에 없는 <table border="1">로 몰래 둔갑시킵니다.
+            const allNodes = doc.body.querySelectorAll('*');
+            allNodes.forEach(el => {
+                const style = el.getAttribute('style') || '';
+                const className = el.getAttribute('class') || '';
+                if ((el.tagName === 'DIV' && style.includes('border')) || el.tagName === 'FIELDSET' || className.includes('box')) {
+                    const table = doc.createElement('table');
+                    table.setAttribute('border', '1');
+                    table.setAttribute('cellpadding', '10');
+                    table.setAttribute('cellspacing', '0');
+                    table.setAttribute('style', 'border-collapse: collapse; width: 100%; border: 1px solid #000000; margin: 15px 0;');
+                    
+                    const tr = doc.createElement('tr');
+                    const td = doc.createElement('td');
+                    td.setAttribute('style', 'border: 1px solid #000000; padding: 15px; color: #000000; font-size: 11pt; vertical-align: top;');
+                    
+                    td.innerHTML = el.innerHTML;
+                    tr.appendChild(td);
+                    table.appendChild(tr);
+                    
+                    el.parentNode.replaceChild(table, el);
                 }
             });
 
-            const blob = new Blob([sandbox.innerHTML], { type: 'text/html' });
-            const richText = new ClipboardItem({ 'text/html': blob });
-            
-            navigator.clipboard.write([richText]).then(() => {
-                showToast('🚀 해당 페이지의 분리 문항 전체가 테마 세탁 후 HWP 클립보드에 복사 완료되었습니다!');
-            }).catch(err => {
-                // 폴백 복사 작동
-                const preview = document.getElementById(previewId);
-                const selection = window.getSelection();
-                const range = document.createRange();
-                range.selectNodeContents(preview);
-                selection.removeAllRanges();
-                selection.addRange(range);
-                document.execCommand('copy');
-                selection.removeAllRanges();
-                showToast('🚀 HWP용 리치 텍스트 복사 완료!');
+            // 2. [분수 깨짐 해결] 한글 프로그램은 글자 사이에 테이블이 있으면 강제로 줄을 바꿉니다. 따라서 순수 텍스트 첨자(sup/sub)로 강제 치환합니다.
+            const fractions = doc.body.querySelectorAll('span.fraction');
+            fractions.forEach(span => {
+                const numSpan = span.querySelector('sup');
+                const denSpan = span.querySelector('sub');
+                if (numSpan && denSpan) {
+                    const newFrac = doc.createElement('span');
+                    // 빗금 기호(&frasl;)와 위/아래 첨자를 사용하여 문장 사이에서 절대 찢어지지 않도록 고정합니다.
+                    newFrac.innerHTML = `<sup style="font-size:0.85em;">${numSpan.innerHTML}</sup>/<sub>${denSpan.innerHTML}</sub>`;
+                    span.parentNode.replaceChild(newFrac, span);
+                }
             });
+
+            return doc.body.innerHTML;
+        }
+
+        function copyToHWP(pageIdx) {
+            const pageQuestions = globalPagesQuestionsData[pageIdx];
+            if (!pageQuestions || pageQuestions.length === 0) return alert('복사할 문항 데이터가 없습니다.');
+
+            let htmlString = `<div style="font-family: 'Pretendard', 'Malgun Gothic', sans-serif; line-height: 1.8; color: #000000; font-size: 11pt;">`;
+
+            pageQuestions.forEach((q, qIdx) => {
+                const bodyEditable = document.getElementById(`q-body-text-${pageIdx}-${qIdx}`);
+                let currentHtmlText = bodyEditable ? bodyEditable.innerHTML : q.html_text;
+                
+                // 클립보드 주입 직전에 HWP 전용 파서 엔진을 가동합니다.
+                currentHtmlText = applyHWPFormatting(currentHtmlText);
+
+                const imgHtml = q.image_data ? `<div style="margin: 10px 0;"><img src="${q.image_data}" style="max-width:100%;"></div>` : '';
+
+                let numPrefix = q.q_num.toString().trim();
+                if (!numPrefix.endsWith('.')) { numPrefix += '.'; }
+
+                htmlString += `
+                    <div style="margin-bottom: 30px;">
+                        <div style="margin-bottom: 8px;">${numPrefix} ${currentHtmlText}</div>
+                        ${imgHtml}
+                    </div>
+                `;
+            });
+            htmlString += `</div>`;
+
+            executeClipboardCopy(htmlString, `🚀 [성공] 테두리 박스와 분수 형태가 완벽하게 한글 규격으로 복사되었습니다!`);
+        }
+
+        function copyQuestionToHWP(pageIdx, qIdx) {
+            const qData = globalPagesQuestionsData[pageIdx][qIdx];
+            if (!qData) return;
+
+            const bodyEditable = document.getElementById(`q-body-text-${pageIdx}-${qIdx}`);
+            let currentHtmlText = bodyEditable ? bodyEditable.innerHTML : qData.html_text;
+
+            // 클립보드 주입 직전에 HWP 전용 파서 엔진을 가동합니다.
+            currentHtmlText = applyHWPFormatting(currentHtmlText);
+
+            const imgHtml = qData.image_data ? `<div style="margin: 10px 0;"><img src="${qData.image_data}" style="max-width:100%;"></div>` : '';
+
+            let numPrefix = qData.q_num.toString().trim();
+            if (!numPrefix.endsWith('.')) { numPrefix += '.'; }
+
+            const htmlString = `
+                <div style="font-family: 'Pretendard', 'Malgun Gothic', sans-serif; line-height: 1.8; color: #000000; font-size: 11pt;">
+                    <div style="margin-bottom: 8px;">${numPrefix} ${currentHtmlText}</div>
+                    ${imgHtml}
+                </div>
+            `;
+
+            executeClipboardCopy(htmlString, `🚀 [${qData.q_num}번 문항 성공] 테두리와 분수가 깨짐 없이 한글 규격으로 복사되었습니다!`);
+        }
+
+        // HWP 클립보드 전송의 핵심 샌드박스
+        function executeClipboardCopy(htmlContent, successMsg) {
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            tempDiv.style.top = '0';
+            tempDiv.innerHTML = htmlContent;
+            document.body.appendChild(tempDiv);
+
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(tempDiv);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                showToast(successMsg);
+            } catch (err) {
+                alert('복사 실패. 브라우저 설정을 확인해 주세요.');
+            }
+            
+            selection.removeAllRanges();
+            document.body.removeChild(tempDiv);
+        }
+
+        async function downloadServerHWP() {
+            const allQuestions = Object.values(globalPagesQuestionsData).flat();
+            if(allQuestions.length === 0) return alert('SOMA OS에 적재된 데이터가 없습니다.');
+            showToast('📥 SYNAP 변환 가동 - HWP 문서 빌드 중...');
+            try {
+                const res = await fetch('http://localhost:4000/api/download-hwp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ questions: allQuestions }) });
+                if(!res.ok) throw new Error('서버 에러');
+                const a = document.createElement('a'); a.href = window.URL.createObjectURL(await res.blob()); a.download = 'SOMA_OS_Master_DB.hwp';
+                document.body.appendChild(a); a.click(); a.remove();
+                showToast('🚀 빌드 성공! 정품 한글 파일이 다운로드되었습니다.');
+            } catch (err) { alert('❌ 통신 실패.'); }
         }
 
         const dropZone = document.getElementById('center-image-container');
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
-            dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }, false);
-            document.body.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }, false);
-        });
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => { dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }, false); document.body.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }, false); });
         dropZone.addEventListener('drop', e => { if (e.dataTransfer.files.length > 0) processFiles(e.dataTransfer.files); });
-
-        function showToast(message) {
-            const toast = document.getElementById('toast-box');
-            toast.innerText = message;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 4000);
-        }
-
-        window.addEventListener('keydown', e => {
-            if ((e.metaKey || e.ctrlKey) && e.key === 's') { 
-                e.preventDefault(); 
-                showToast('✨ 성공! 데이터가 안전하게 적재되었습니다!'); 
-            }
-        });
+        function showToast(message) { const toast = document.getElementById('toast-box'); toast.innerText = message; toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
+        window.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); showToast('✨ 데이터가 안전하게 적재되었습니다!'); } });
     </script>
 </body>
 </html>
